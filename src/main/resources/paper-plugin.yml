@@ -1,0 +1,8 @@
+name: mc2source
+version: '1.0-SNAPSHOT'
+main: dev.andrewd1.mc2source.Plugin
+api-version: '1.21'
+
+commands:
+  build:
+    description: "Build your map in source engine"
