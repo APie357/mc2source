@@ -7,8 +7,9 @@ public class VMFSection extends VMFProperty<ArrayList<VMFProperty<?>>> {
         super(name, new ArrayList<>());
     }
 
-    public void addProperty(VMFProperty<?> property) {
+    public VMFSection addProperty(VMFProperty<?> property) {
         value.add(property);
+        return this;
     }
 
     @Override
