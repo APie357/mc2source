@@ -1,16 +1,15 @@
 package dev.andrewd1.mc2source.vmf;
 
 import dev.andrewd1.mc2source.Config;
-import dev.andrewd1.mc2source.Plugin;
 import dev.andrewd1.mc2source.vmf.properties.*;
-import io.papermc.paper.math.BlockPosition;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.util.Vector;
 
+import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -62,7 +61,12 @@ public class VMFWriter {
 
     public void addBlock(Block block) {
         VMFSection vmfBlock = new VMFSection("solid")
-                .addProperty(new VMFInteger("id", idCounter++));
+                .addProperty(new VMFInteger("id", idCounter++))
+                .addProperty(new VMFSection("editor")
+                        .addProperty(new VMFColor("color", new Color(0, 234, 235)))
+                        .addProperty(new VMFBoolean("visgroupshown", true))
+                        .addProperty(new VMFBoolean("visgroupautoshown", true))
+                );
 
         block.getRelative(BlockFace.DOWN);
         for (BlockFace face : new BlockFace[]{
@@ -73,16 +77,18 @@ public class VMFWriter {
                 BlockFace.UP,
                 BlockFace.DOWN
         }) {
-            vmfBlock.addProperty(new VMFSection("side")
-                    .addProperty(new VMFInteger("id", idCounter++))
-                    .addProperty(new VMFString("material", "TOOLS/NODRAW"))
-                    .addProperty(new VMFPlane("plane", block, face))
-                    .addProperty(new VMFString("uaxis", "[1 0 0 0] 0.25"))  // TODO: make real (texture offsets?)
-                    .addProperty(new VMFString("vaxis", "[0 1 0 0] 0.25"))  // TODO: make real (texture offsets?)
-                    .addProperty(new VMFInteger("rotation", 0))
-                    .addProperty(new VMFInteger("lightmapscale", 16))
-                    .addProperty(new VMFInteger("smoothing_groups", 0))
-            );
+            boolean shouldBeDrawn = block.getRelative(face).isSolid();
+            vmfBlock.addProperty(
+                    new VMFSection("side")
+                        .addProperty(new VMFInteger("id", idCounter++))
+                        .addProperty(new VMFString("material", shouldBeDrawn ? "NATURE/GRASSFLOOR002A" : "TOOLS/NODRAW"))
+                        .addProperty(new VMFPlane("plane", block, face))
+                        .addProperty(new VMFTextureAxis("uaxis", 1, 0, 0, 0, 0.25))
+                        .addProperty(new VMFTextureAxis("vaxis", 0, 1, 0, 0, 0.25))
+                        .addProperty(new VMFInteger("rotation", 0))
+                        .addProperty(new VMFInteger("lightmapscale", 16))
+                        .addProperty(new VMFInteger("smoothing_groups", 0))
+                    );
         }
 
         brushes.addProperty(vmfBlock);
@@ -91,9 +97,35 @@ public class VMFWriter {
     public void addEntity(Entity entity) {
         if (entity.getType() == EntityType.PLAYER) return;
         Location pos = entity.getLocation();
+        VMFEntity entityType = null;
 
-        if (entity.getType() == EntityType.VILLAGER) {
-
+        for (VMFEntity vmfEntity : VMFEntity.values()) {
+            if (vmfEntity.type == entity.getType()) {
+                entityType = vmfEntity;
+                break;
+            }
         }
+
+        if (entityType == null) {
+            entity.remove();
+            return;
+        }
+
+        VMFSection entitySection = new VMFSection("entity")
+                .addProperty(new VMFInteger("id", idCounter++))
+                .addProperty(new VMFString("classname", entityType.name().toLowerCase()))
+                .addProperty(new VMFVector("origin", minecraftToSourceLocation(pos.toVector())))
+                .addProperty(new VMFVector("rotation", new Vector(0, 0, 0)))
+        ;
+
+        properties.add(entitySection);
+    }
+
+    public static Vector minecraftToSourceLocation(Vector minecraftLocation) {
+        return new Vector(
+                minecraftLocation.getBlockX() * Config.hammerUnitsPerBlock,
+                minecraftLocation.getBlockZ() * Config.hammerUnitsPerBlock,
+                minecraftLocation.getBlockY() * Config.hammerUnitsPerBlock
+        );
     }
 }

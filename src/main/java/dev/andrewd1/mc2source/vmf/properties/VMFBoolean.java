@@ -11,6 +11,6 @@ public class VMFBoolean extends VMFProperty<Boolean> {
 
     @Override
     public String toString() {
-        return "\"%s\" \"%d\"".formatted(name, value ? 1 : 0);
+        return "\"%s\" \"%d\"\n".formatted(name, value ? 1 : 0);
     }
 }

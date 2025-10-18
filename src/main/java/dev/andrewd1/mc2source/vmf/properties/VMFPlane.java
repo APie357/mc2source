@@ -17,7 +17,7 @@ public class VMFPlane extends VMFProperty<Triple<Location, Location, Location>> 
 
     @Override
     public String toString() {
-        return "\"%s\" \"(%d %d %d) (%d %d %d) (%d %d %d)\"".formatted(
+        return "\"%s\" \"(%d %d %d) (%d %d %d) (%d %d %d)\"\n".formatted(
                 name,
                 (int) value.left().x(),
                 (int) value.left().y(),

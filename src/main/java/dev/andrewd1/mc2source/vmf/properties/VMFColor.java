@@ -13,6 +13,6 @@ public class VMFColor extends VMFProperty<Color> {
 
     @Override
     public String toString() {
-        return "\"%s\" \"%d %d %d\"".formatted(name, value.getRed(), value.getGreen(), value.getBlue());
+        return "\"%s\" \"%d %d %d\"\n".formatted(name, value.getRed(), value.getGreen(), value.getBlue());
     }
 }

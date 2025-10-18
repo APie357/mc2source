@@ -11,6 +11,6 @@ public class VMFInteger extends VMFProperty<Integer> {
 
     @Override
     public String toString() {
-        return "\"%s\" \"%d\"".formatted(name, value);
+        return "\"%s\" \"%d\"\n".formatted(name, value);
     }
 }

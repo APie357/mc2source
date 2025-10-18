@@ -7,6 +7,6 @@ public class VMFString extends VMFProperty<String> {
 
     @Override
     public String toString() {
-        return "\"%s\" \"%s\"".formatted(name, value);
+        return "\"%s\" \"%s\"\n".formatted(name, value);
     }
 }

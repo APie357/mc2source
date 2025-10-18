@@ -21,8 +21,8 @@ public class VMFSection extends VMFProperty<ArrayList<VMFProperty<?>>> {
         sb.append("\n{");
 
         for (VMFProperty<?> property : value) {
+            sb.append("    ");
             sb.append(property.toString());
-            sb.append("\n");
         }
 
         sb.append("}\n");
