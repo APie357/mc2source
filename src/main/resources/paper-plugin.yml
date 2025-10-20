@@ -6,3 +6,4 @@ api-version: '1.21'
 commands:
   build:
     description: "Build your map in source engine"
+    usage: "/<command>"

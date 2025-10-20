@@ -16,13 +16,16 @@ public class VMFSection extends VMFProperty<ArrayList<VMFProperty<?>>> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\n");
         sb.append(name);
-        sb.append("\n{");
+        sb.append("\n{\n");
 
         for (VMFProperty<?> property : value) {
-            sb.append("    ");
-            sb.append(property.toString());
+            String[] lines = property.toString().split("\n");
+            for (String line : lines) {
+                sb.append("    ");
+                sb.append(line);
+                sb.append("\n");
+            }
         }
 
         sb.append("}\n");
