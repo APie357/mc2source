@@ -27,7 +27,7 @@ public class VMFPlane extends VMFProperty<Triple<Vector, Vector, Vector>> {
             case NORTH -> new Vector(0, 1, 0);
             case SOUTH -> new Vector(1, 1, 1);
             case EAST -> new Vector(1, 1, 0);
-            case WEST -> new Vector(0, 1, 1);
+            case WEST -> new Vector(0, 0, 0);
             default -> new Vector(0, 0, 0);
         };
     }
@@ -51,7 +51,7 @@ public class VMFPlane extends VMFProperty<Triple<Vector, Vector, Vector>> {
             case NORTH -> new Vector(1, 0, 0);
             case SOUTH -> new Vector(0, 0, 1);
             case EAST -> new Vector(1, 0, 1);
-            case WEST -> new Vector(0, 0, 0);
+            case WEST -> new Vector(0, 1, 1);
             default -> new Vector(1, 0, 1);
         };
     }

@@ -76,6 +76,9 @@ public class VMFWriter {
                 .addProperty(new VMFInteger("id", idCounter++))
                 ;
 
+        VMFMaterial blockMaterial = VMFMaterial.fromMaterial(block.getType());
+        if (blockMaterial == null) return;
+
         block.getRelative(BlockFace.DOWN);
         for (BlockFace face : new BlockFace[]{
                 BlockFace.NORTH,
@@ -85,14 +88,34 @@ public class VMFWriter {
                 BlockFace.UP,
                 BlockFace.DOWN
         }) {
-            boolean shouldBeDrawn = block.getRelative(face).isSolid();
+            boolean hideFace = block.getRelative(face).isSolid();
+            boolean horizontal = VMFUtil.isFaceHorizontal(face);
+            boolean isNorthSouth = face == BlockFace.NORTH || face == BlockFace.SOUTH;
+            VMFMaterial material = hideFace ? VMFMaterial.NODRAW : blockMaterial;
+
             vmfBlock.addProperty(
                     new VMFSection("side")
                             .addProperty(new VMFInteger("id", idCounter++))
                             .addProperty(new VMFPlane("plane", block, face))
-                            .addProperty(new VMFString("material", shouldBeDrawn ? "NATURE/GRASSFLOOR002A" : "TOOLS/TOOLSNODRAW"))
-                            .addProperty(new VMFTextureAxis("uaxis", 1, 0, 0, 0, 0.25))
-                            .addProperty(new VMFTextureAxis("vaxis", 0, 1, 0, 0, 0.25))
+                            .addProperty(new VMFString("material", material.texture))
+                            .addProperty(
+                                    horizontal ?
+                                    new VMFTextureAxis("uaxis", 1, 0, 0, 0, Config.hammerTextureScale) :
+                                    (
+                                            isNorthSouth ?
+                                            new VMFTextureAxis("uaxis", 0, 0, 1, 0, Config.hammerTextureScale) :
+                                            new VMFTextureAxis("uaxis", 0, 1, 0, 0, Config.hammerTextureScale)
+                                    )
+                            )
+                            .addProperty(
+                                    horizontal ?
+                                    new VMFTextureAxis("vaxis", 0, 1, 0, 0, Config.hammerTextureScale) :
+                                    (
+                                            isNorthSouth ?
+                                            new VMFTextureAxis("vaxis", 1, 0, 0, 0, Config.hammerTextureScale) :
+                                            new VMFTextureAxis("vaxis", 0, 0, 1, 0, Config.hammerTextureScale)
+                                    )
+                            )
                             .addProperty(new VMFInteger("rotation", 0))
                             .addProperty(new VMFInteger("lightmapscale", 16))
                             .addProperty(new VMFInteger("smoothing_groups", 0))
@@ -118,9 +141,6 @@ public class VMFWriter {
     }
 
     public void addBlocksFromWorld(World world) {
-        // Set the origin to world spawn
-        VMFUtil.setOrigin(world.getSpawnLocation().toVector());
-        
         for (Chunk chunk : world.getLoadedChunks()) {
             addBlocksFromChunk(chunk);
         }
