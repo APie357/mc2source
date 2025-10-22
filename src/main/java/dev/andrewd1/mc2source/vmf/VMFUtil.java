@@ -7,8 +7,8 @@ import org.bukkit.util.Vector;
 public class VMFUtil {
     public static Vector minecraftToSourceLocation(Vector minecraftLocation) {
         return new Vector(
-                minecraftLocation.getX() * Config.hammerUnitsPerBlock,
                 minecraftLocation.getZ() * Config.hammerUnitsPerBlock,
+                minecraftLocation.getX() * Config.hammerUnitsPerBlock,
                 minecraftLocation.getY() * Config.hammerUnitsPerBlock
         );
     }

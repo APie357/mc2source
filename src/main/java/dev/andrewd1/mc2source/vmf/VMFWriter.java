@@ -103,8 +103,8 @@ public class VMFWriter {
                                     new VMFTextureAxis("uaxis", 1, 0, 0, 0, Config.hammerTextureScale) :
                                     (
                                             isNorthSouth ?
-                                            new VMFTextureAxis("uaxis", 0, 0, 1, 0, Config.hammerTextureScale) :
-                                            new VMFTextureAxis("uaxis", 0, 1, 0, 0, Config.hammerTextureScale)
+                                            new VMFTextureAxis("uaxis", 0, 1, 0, 0, Config.hammerTextureScale) :
+                                            new VMFTextureAxis("uaxis", 0, 0, 1, 0, Config.hammerTextureScale)
                                     )
                             )
                             .addProperty(
@@ -112,8 +112,8 @@ public class VMFWriter {
                                     new VMFTextureAxis("vaxis", 0, 1, 0, 0, Config.hammerTextureScale) :
                                     (
                                             isNorthSouth ?
-                                            new VMFTextureAxis("vaxis", 1, 0, 0, 0, Config.hammerTextureScale) :
-                                            new VMFTextureAxis("vaxis", 0, 0, 1, 0, Config.hammerTextureScale)
+                                            new VMFTextureAxis("vaxis", 0, 0, 1, 0, Config.hammerTextureScale) :
+                                            new VMFTextureAxis("vaxis", 1, 0, 0, 0, Config.hammerTextureScale)
                                     )
                             )
                             .addProperty(new VMFInteger("rotation", 0))
