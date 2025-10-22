@@ -1,5 +1,6 @@
 package dev.andrewd1.mc2source;
 
+import dev.andrewd1.mc2source.command.BuildDefaultCommand;
 import dev.andrewd1.mc2source.command.BuildVMFOnlyCommand;
 import dev.andrewd1.mc2source.event.OnEntitySpawn;
 import io.papermc.paper.command.brigadier.Commands;
@@ -27,7 +28,8 @@ public final class Plugin extends JavaPlugin {
             commands.registrar().register(
                 Commands.literal("mc2source")
                         .then(Commands.literal("build")
-                                .then(Commands.literal("vmf").executes(new BuildVMFOnlyCommand(this)))
+                                .then(Commands.literal("vmf").executes(new BuildVMFOnlyCommand()))
+                                .then(Commands.literal("default").executes(new BuildDefaultCommand()))
                         )
                         .then(Commands.literal("debug")
                                 .then(Commands.literal("printExecutables").executes(ctx -> {
