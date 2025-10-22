@@ -1,12 +1,13 @@
 package dev.andrewd1.mc2source;
 
+import dev.andrewd1.mc2source.command.BuildVMFOnlyCommand;
 import dev.andrewd1.mc2source.event.OnEntitySpawn;
-import dev.andrewd1.mc2source.vmf.VMFWriter;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import net.kyori.adventure.text.Component;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Objects;
 import java.util.logging.Logger;
 
 public final class Plugin extends JavaPlugin {
@@ -22,19 +23,24 @@ public final class Plugin extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new OnEntitySpawn(), this);
 
-//        for (BlockFace face : BlockFace.values()) {
-//            log.info("%s %d %d %d".formatted(face.name(), face.getModX(), face.getModY(), face.getModZ()));
-//        }
-
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
             commands.registrar().register(
-                    Commands.literal("build").executes(ctx -> {
-                        VMFWriter writer = new VMFWriter(new java.io.File(getDataFolder(), "test.vmf"));
-                        writer.addEntitiesFromWorld(Objects.requireNonNull(getServer().getWorld("world")));
-                        writer.addBlocksFromWorld(Objects.requireNonNull(getServer().getWorld("world")));
-                        writer.write();
-                        return 1;
-                    }).build()
+                Commands.literal("mc2source")
+                        .then(Commands.literal("build")
+                                .then(Commands.literal("vmf").executes(new BuildVMFOnlyCommand(this)))
+                        )
+                        .then(Commands.literal("debug")
+                                .then(Commands.literal("printExecutables").executes(ctx -> {
+                                    CommandSender sender = ctx.getSource().getSender();
+
+                                    sender.sendMessage(Component.text("VBSP executable path: %s".formatted(Config.vbsp.getAbsolutePath())));
+                                    sender.sendMessage(Component.text("VVIS executable path: %s".formatted(Config.vvis.getAbsolutePath())));
+                                    sender.sendMessage(Component.text("VRAD executable path: %s".formatted(Config.vrad.getAbsolutePath())));
+
+                                    return 1;
+                                }))
+                        )
+                        .build()
             );
         });
 
