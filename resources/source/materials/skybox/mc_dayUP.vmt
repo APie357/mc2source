@@ -1,8 +1,0 @@
-sky
-{
-    $basetexture mc_dayUP.vtf
-    $hdrbasetexture mc_dayUP.vtf
-    $nofog 1
-    $nomip 1
-    $ignorez 1
-}

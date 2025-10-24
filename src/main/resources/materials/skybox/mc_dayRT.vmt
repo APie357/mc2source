@@ -1,0 +1,8 @@
+sky
+{
+    $basetexture skybox/mc_dayRT.vtf
+    $hdrbasetexture skybox/mc_dayRT.vtf
+    $nofog 1
+    $nomip 1
+    $ignorez 1
+}
