@@ -38,7 +38,7 @@ public class VMFWriter {
                 .addProperty(new VMFString("detailmaterial", "detail/detailsprites"))
                 .addProperty(new VMFString("detailvbsp", "detail.vbsp"))
                 .addProperty(new VMFInteger("maxpropscreenwidth", -1))
-                .addProperty(new VMFString("skyname", "sky_day01_01"))
+                .addProperty(new VMFString("skyname", "mc_day"))
         ;
 
         properties.add(new VMFSection("versioninfo")

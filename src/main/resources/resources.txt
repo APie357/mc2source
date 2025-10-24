@@ -1,0 +1,12 @@
+resources/materials/skybox mc_dayBK.vmt
+resources/materials/skybox mc_dayBK.vtf
+resources/materials/skybox mc_dayDN.vmt
+resources/materials/skybox mc_dayDN.vtf
+resources/materials/skybox mc_dayFT.vmt
+resources/materials/skybox mc_dayFT.vtf
+resources/materials/skybox mc_dayLF.vmt
+resources/materials/skybox mc_dayLF.vtf
+resources/materials/skybox mc_dayRT.vmt
+resources/materials/skybox mc_dayRT.vtf
+resources/materials/skybox mc_dayUP.vmt
+resources/materials/skybox mc_dayUP.vtf

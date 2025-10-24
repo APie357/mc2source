@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -98,6 +99,25 @@ public class MapBuilder {
         } catch (IOException | InterruptedException e) {
             Plugin.log.severe(e.getMessage());
             return false;
+        }
+    }
+
+    public void runBSPZip() {
+        try {
+            File list = new File(Plugin.instance.getDataFolder(), "resources.txt");
+            File resourcesDir = new File(Plugin.instance.getDataFolder(), "resources");
+            if (list.exists()) list.delete();
+            list.createNewFile();
+
+            try (FileWriter writer = new FileWriter(list)) {
+                for (File resource : resourcesDir.listFiles()) {
+                    String relative = Plugin.instance.getDataFolder().toPath().relativize(resource.toPath()).toString();
+                }
+                writer.write("\n");  // Inside the map file
+                writer.write("\n");  // On the disk
+            }
+        } catch (IOException e) {
+
         }
     }
 
