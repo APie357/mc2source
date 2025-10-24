@@ -19,4 +19,5 @@ public class Config {
     public static File vbsp = new File(toolsDir,  "vbsp.exe");
     public static File vvis = new File(toolsDir,  "vvis.exe");
     public static File vrad = new File(toolsDir,  "vrad.exe");
+    public static File bspZip = new File(toolsDir,  "bspzip.exe");
 }
