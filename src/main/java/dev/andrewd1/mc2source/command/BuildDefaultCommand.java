@@ -28,6 +28,9 @@ public class BuildDefaultCommand implements Command<CommandSourceStack> {
         sender.sendMessage("Running VRAD...");
         if (!builder.runVRAD(sender)) return 0;
 
+        sender.sendMessage("Embedding resources...");
+        builder.runBSPZip();
+
         builder.copyMap();
 
         sender.sendMessage(Component.text("Successfully built \"%s\"".formatted(mapName)));

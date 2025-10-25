@@ -14,6 +14,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Objects;
 
 public class MapBuilder {
@@ -36,6 +37,12 @@ public class MapBuilder {
     private int run(ProcessBuilder processBuilder) throws IOException, InterruptedException {
         if (Config.debug) {
             processBuilder.redirectOutput(new File(Plugin.instance.getDataFolder(), "debug.log"));
+        }
+
+        if (Config.shouldUseWine) {
+            List<String> command = processBuilder.command();
+            command.addFirst("wine");
+            processBuilder.command(command);
         }
 
         processBuilder.environment().put("VPROJECT", Config.gameDirectory.getAbsolutePath());
@@ -110,14 +117,24 @@ public class MapBuilder {
             list.createNewFile();
 
             try (FileWriter writer = new FileWriter(list)) {
-                for (File resource : resourcesDir.listFiles()) {
-                    String relative = Plugin.instance.getDataFolder().toPath().relativize(resource.toPath()).toString();
+                for (File resource : Objects.requireNonNull(FileUtils.getFilesRecursive(resourcesDir))) {
+                    String relative = resourcesDir.toPath().relativize(resource.toPath()).toString();
+                    String absolute = resource.getAbsolutePath();
+                    Plugin.log.info(relative);
+                    writer.write(relative + "\n");
+                    writer.write(absolute + "\n");
                 }
-                writer.write("\n");  // Inside the map file
-                writer.write("\n");  // On the disk
             }
-        } catch (IOException e) {
 
+            run(new ProcessBuilder(
+                    Config.bspZip.getAbsolutePath(),
+                    "-addlist",
+                    new File(Plugin.instance.getDataFolder(), mapName + ".bsp").getAbsolutePath(),
+                    list.getAbsolutePath(),
+                    new File(Plugin.instance.getDataFolder(), mapName + "-final.bsp").getAbsolutePath()
+            ));
+        } catch (IOException | InterruptedException e) {
+            Plugin.log.severe(e.getMessage());
         }
     }
 
@@ -125,7 +142,7 @@ public class MapBuilder {
         File mapFolder = new File(Config.gameDirectory, "maps");
         try {
             Files.copy(
-                    new File(Plugin.instance.getDataFolder(), mapName + ".bsp").toPath(),
+                    new File(Plugin.instance.getDataFolder(), mapName + "-final.bsp").toPath(),
                     new File(mapFolder, mapName + ".bsp").toPath(),
                     StandardCopyOption.REPLACE_EXISTING
             );
